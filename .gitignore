@@ -9,8 +9,6 @@ def password_strength_checker(password):
     return "Medium"
   if not any(c.isdigit() for c in password):
     return "Medium"
-
-  # If all of the criteria are met, the password is considered to be very strong.
   return "Very strong"
 
 password = "ThisIsAStrongPassword!"

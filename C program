@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <ctype.h>
+#define MIN_LENGTH 8
+#define REQUIRE_SPECIAL_CHARACTERS 1
+#define REQUIRE_UPPERCASE_AND_LOWERCASE_LETTERS 1
+#define REQUIRE_NUMBERS 1
+int evaluate_password_strength(char *password) {
+  // Check the length of the password.
+  int length = strlen(password);
+  if (length < MIN_LENGTH) {
+    return 0;
+  }
+
+  int special_characters_found = 0;
+  for (int i = 0; i < length; i++) {
+    if (!isalnum(password[i]) && password[i] != '_') {
+      special_characters_found = 1;
+      break;
+    }
+  }
+  if (!special_characters_found && REQUIRE_SPECIAL_CHARACTERS) {
+    return 0;
+  }
+  int uppercase_letters_found = 0;
+  int lowercase_letters_found = 0;
+  for (int i = 0; i < length; i++) {
+    if (isupper(password[i])) {
+      uppercase_letters_found = 1;
+    } else if (islower(password[i])) {
+      lowercase_letters_found = 1;
+    }
+  }
+  if (!uppercase_letters_found || !lowercase_letters_found && REQUIRE_UPPERCASE_AND_LOWERCASE_LETTERS) {
+    return 0;
+  }
+  int numbers_found = 0;
+  for (int i = 0; i < length; i++) {
+    if (isdigit(password[i])) {
+      numbers_found = 1;
+      break;
+    }
+  }
+  if (!numbers_found && REQUIRE_NUMBERS) {
+    return 0;
+  }
+  return 1;
+}
+void print_password_strength(int strength) {
+  switch (strength) {
+    case 0:
+      printf("Weak password.\n");
+      break;
+    case 1:
+      printf("Strong password.\n");
+      break;
+    default:
+      printf("Unknown password strength.\n");
+  }
+}
+
+int main() {
+  char password[256];
+  printf("Enter a password: ");
+  scanf("%s", password);
+  int strength = evaluate_password_strength(password);
+
+  print_password_strength(strength);
+
+  return 0;
+}
